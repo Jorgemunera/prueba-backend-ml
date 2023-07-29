@@ -54,15 +54,11 @@ class OrdersService {
     }
 
     async updateItem(id, changes) {
-        console.log('estoy aqui 7------------ ')
-        console.log('id ------------ ', id)
-        console.log('changes ------------ ', changes)
         const [rowsUpdated, [updatedItem]] = await models.OrderProduct.update(changes, {
             where: { orderId: id },
             returning: true,
         });
 
-        console.log('estoy aqui 8------------ ')
         if (rowsUpdated === 0) {
             throw boom.notFound('Item not found');
         }
