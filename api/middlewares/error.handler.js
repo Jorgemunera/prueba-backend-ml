@@ -4,6 +4,17 @@ function logErrors(err, req, res, next){
     next(err);
 }
 
+function ormErrorHandler(err, req, res, next) {
+    if (err.message == 'Validation error') {
+      res.status(409).json({
+        statusCode: 409,
+        message: err.name,
+        errors: err.errors
+      });
+    }
+    next(err);
+}
+
 function boomErrorHandler(err, req, res, next){
     console.log('--boomErrorHandler');
     if(err.isBoom){
@@ -25,5 +36,6 @@ function errorHandler(err, req, res, next){
 module.exports = {
     logErrors,
     boomErrorHandler,
+    ormErrorHandler,
     errorHandler
 }

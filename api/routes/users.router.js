@@ -2,16 +2,17 @@ const express = require('express');
 
 const UsersService = require('../services/users.service');
 const validatorHandler = require('../middlewares/validator.handler');
-const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/users.schema');
-const { createUserProductSchema } = require('../schemas/users-products.schema');
+const {
+    createUserSchema,
+    getUserSchema } = require('../schemas/users.schema');
 
 const router = express.Router();
 const service = new UsersService();
 
 router.get('/', async (req, res, next) => {
     try {
-        const users = await service.find();
-        res.json(users);
+        const users = await service.findAllUsers();
+        res.status(200).json(users);
     } catch (error) {
         next(error);
     }
@@ -22,8 +23,8 @@ router.get('/:id',
     async (req, res, next) => {
         try {
             const { id } = req.params;
-            const category = await service.findOne(id);
-            res.json(category);
+            const category = await service.findOneUser(id);
+            res.status(200).json(category);
         } catch (error) {
             next(error);
         }
@@ -43,21 +44,6 @@ router.post('/',
     }
 );
 
-router.patch('/:id',
-    validatorHandler(getUserSchema, 'params'),
-    validatorHandler(updateUserSchema, 'body'),
-    async (req, res, next) => {
-        try {
-            const { id } = req.params;
-            const body = req.body;
-            const category = await service.update(id, body);
-            res.json(category);
-        } catch (error) {
-            next(error);
-        }
-    }
-);
-
 router.delete('/:id',
     validatorHandler(getUserSchema, 'params'),
     async (req, res, next) => {
@@ -71,17 +57,5 @@ router.delete('/:id',
     }
 );
 
-router.post('/user-product',
-    validatorHandler(createUserProductSchema, 'body'),
-    async (req, res, next) => {
-        try {
-            const body = req.body;
-            const newItem = await service.addUserProduct(body);
-            res.status(201).json(newItem);
-        } catch (error) {
-            next(error);
-        }
-    }
-);
 
 module.exports = router;

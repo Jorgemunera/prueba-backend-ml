@@ -11,19 +11,39 @@ class OrdersService {
         return newOrder;
     }
 
-    async addItem(data) {
-        const newItem = await models.OrderProduct.create(data);
-        return newItem;
+    async updateOrAddItem(data) {
+        const order = await models.Order.findByPk(data.userId);
+        if(!order){
+
+            const newOrder = await this.create(data);
+            const newItem = await models.OrderProduct.create(data);
+            return newItem;
+        }
+
+        const item = await models.OrderProduct.findAll({
+            where:{
+                orderId: data.orderId,
+                productId: data.productId
+            }
+        })
+
+        if(item.length === 0){
+            const newItem = await models.OrderProduct.create(data);
+            return newItem;
+        }
+
+        const updateItem = await this.updateItem(data.orderId, data)
+        return updateItem;
     }
 
-    async find() {
+    async findAllOrders() {
         const orders = await models.Order.findAll({
             include: ['user', 'items']
         });
         return orders;
     }
 
-    async findOne(id) {
+    async findOneOrder(id) {
         const order = await models.Order.findByPk(id, {
             include: ['user', 'items']
         });
@@ -33,18 +53,21 @@ class OrdersService {
         return order;
     }
 
-    async update(id, changes) {
+    async updateItem(id, changes) {
+        console.log('estoy aqui 7------------ ')
+        console.log('id ------------ ', id)
+        console.log('changes ------------ ', changes)
+        const [rowsUpdated, [updatedItem]] = await models.OrderProduct.update(changes, {
+            where: { orderId: id },
+            returning: true,
+        });
 
-        const OrderUpdate = await models.Order.update();
-        if (index === -1) {
-            throw boom.notFound('Order not found');
+        console.log('estoy aqui 8------------ ')
+        if (rowsUpdated === 0) {
+            throw boom.notFound('Item not found');
         }
-        const order = this.Orders[index];
-        this.Orders[index] = {
-            ...Order,
-            ...changes
-        };
-        return this.Orders[index];
+
+        return updatedItem;
     }
 
     async delete(id) {

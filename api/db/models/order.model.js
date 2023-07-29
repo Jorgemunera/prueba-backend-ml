@@ -11,16 +11,6 @@ const OrderSchema = {
         primaryKey: true,
         type: DataTypes.INTEGER
     },
-    amount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    createdAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        field: 'created_at',
-        defaultValue: Sequelize.NOW,
-    },
     userId: {
         field: 'user_id',
         allowNull: false,
@@ -31,10 +21,15 @@ const OrderSchema = {
         },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
-    }
+    },
+    createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.NOW,
+    },
 
 }
-
 
 class Order extends Model {
 

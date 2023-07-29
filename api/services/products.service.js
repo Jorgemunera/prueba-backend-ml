@@ -4,19 +4,27 @@ const { models } = require('../libs/sequelize');
 
 class ProductsService {
 
-    constructor() {}
+    constructor() { }
 
     async create(data) {
         const newProduct = await models.Product.create(data);
         return newProduct;
     }
 
-    async find() {
+    async findAllProducts() {
         const products = await models.Product.findAll();
         return products;
     }
 
-    async findOne(id) {
+    async findProductsByUserId(userId) {
+        const products = await models.Product.findAll({
+            where: { userId },
+        });
+
+        return products;
+    }
+
+    async findOneProduct(id) {
         const product = await models.Product.findByPk(id);
         if (!product) {
             throw boom.notFound('product not found');
@@ -25,26 +33,26 @@ class ProductsService {
     }
 
     async update(id, changes) {
+        const [rowsUpdated, [updatedProduct]] = await models.Product.update(changes, {
+            where: { id },
+            returning: true,
+        });
 
-        const productUpdate = await models.Product.update();
-        if (index === -1) {
-            throw boom.notFound('product not found');
+        if (rowsUpdated === 0) {
+            throw boom.notFound('Product not found');
         }
-        const product = this.products[index];
-        this.products[index] = {
-            ...product,
-            ...changes
-        };
-        return this.products[index];
+
+        return updatedProduct;
     }
 
     async delete(id) {
-        const index = this.products.findIndex(item => item.id === id);
-        if (index === -1) {
-            throw boom.notFound('product not found');
+        const product = await models.Product.findByPk(id);
+        if (!product) {
+            throw boom.notFound('Product not found');
         }
-        this.products.splice(index, 1);
-        return { id };
+
+        await product.destroy();
+        return { id: product.id };
     }
 
 }

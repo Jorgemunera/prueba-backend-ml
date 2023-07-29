@@ -11,13 +11,24 @@ const { createOrderProductSchema } = require('../schemas/orders-products.schema'
 const router = express.Router();
 const service = new OrdersService();
 
+router.get('/',
+    async (req, res, next) => {
+        try {
+            const orders = await service.findAllOrders();
+            res.status(200).json(orders);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 router.get('/:id',
     validatorHandler(getOrderSchema, 'params'),
     async (req, res, next) => {
         try {
             const { id } = req.params;
-            const order = await service.findOne(id);
-            res.json(order);
+            const order = await service.findOneOrder(id);
+            res.status(200).json(order);
         } catch (error) {
             next(error);
         }
@@ -42,7 +53,7 @@ router.post('/add-item',
     async (req, res, next) => {
         try {
             const body = req.body;
-            const newItem = await service.addItem(body);
+            const newItem = await service.updateOrAddItem(body);
             res.status(201).json(newItem);
         } catch (error) {
             next(error);

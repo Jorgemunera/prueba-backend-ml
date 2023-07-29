@@ -15,16 +15,16 @@ class UsersService {
         return newUserProduct;
     }
 
-    async find() {
+    async findAllUsers() {
         const rta = await models.User.findAll({
-            include: ['orders', 'user-product']
+            include: ['products', 'order']
         });
         return rta;
     }
 
-    async findOne(id) {
+    async findOneUser(id) {
         const user = await models.User.findByPk(id, {
-            include: ['products', 'user-product']
+            include: ['products', 'order']
         });
         if (!user) {
             throw boom.notFound('user not found');
@@ -32,14 +32,8 @@ class UsersService {
         return user;
     }
 
-    async update(id, changes) {
-        const user = await this.findOne(id);
-        const rta = await user.update(changes);
-        return rta;
-    }
-
     async delete(id) {
-        const user = await this.findOne(id);
+        const user = await this.findOneUser(id);
         await user.destroy();
         return { id };
     }

@@ -33,16 +33,14 @@ const UserSchema = {
 
 class User extends Model {
     static associate(models) {
-        this.hasMany(models.Order, {
-            as: 'orders',
+        this.hasOne(models.Order, {
+            as: 'order',
             foreignKey: 'userId'
         });
-        this.belongsToMany(models.Product, {
-            as: 'user-product',
-            through: models.UserProduct,
-            foreignKey: 'userId',
-            otherKey: 'productId'
-        })
+        this.hasMany(models.Product, {
+            as: 'products',
+            foreignKey: 'userId'
+        });
     }
 
     static config(sequelize) {
