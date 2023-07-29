@@ -19,9 +19,7 @@ router.get('/', async (req, res, next) => {
         const products = await service.find();
         res.status(200).json(products);
     } catch (error) {
-        res.status(404).json({
-            message: error.message
-        });
+        next(error);
     }
 })
 

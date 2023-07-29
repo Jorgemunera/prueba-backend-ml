@@ -1,10 +1,10 @@
 const Joi = require('joi');
 
-const id = Joi.string().uuid();
+const id = Joi.number().integer().positive();
 const name = Joi.string().min(2).max(30);
 const sku = Joi.string().alphanum().min(1).max(30);
 const amount = Joi.number().integer().min(1).max(99);
-const price = Joi.number().min(0.1).precision(2);
+const price = Joi.number().integer().min(1);
 
 const createProductSchema = Joi.object({
     name: name.required(),
