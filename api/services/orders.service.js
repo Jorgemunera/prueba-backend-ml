@@ -1,6 +1,8 @@
 const boom = require('@hapi/boom');
 
 const { models } = require('../libs/sequelize');
+const ProductsService = require('./products.service');
+const productService = new ProductsService();
 
 class OrdersService {
 
@@ -11,29 +13,47 @@ class OrdersService {
         return newOrder;
     }
 
-    async updateOrAddItem(data) {
-        const order = await models.Order.findByPk(data.userId);
-        if(!order){
-
-            const newOrder = await this.create(data);
-            const newItem = await models.OrderProduct.create(data);
-            return newItem;
-        }
-
-        const item = await models.OrderProduct.findAll({
+    async addItem(data) {
+        const amountToBuy = data.amount;
+        const order = await models.Order.findOne({
             where:{
-                orderId: data.orderId,
-                productId: data.productId
+                userId: data.userId
             }
         });
 
-        if(item.length === 0){
+        const consultProduct = await models.Product.findOne({
+            where:{
+                id: data.productId
+            }
+        });
+
+        if(!consultProduct){
+            throw boom.notFound('product not found');
+        }
+
+        const productStock = consultProduct.dataValues.amount;
+        if(amountToBuy > productStock){
+            throw boom.badRequest('stock not available');
+        }
+
+        if(!order){
+            const newOrder = await this.create(data);
             const newItem = await models.OrderProduct.create(data);
+
+            const newStock = productStock - amountToBuy;
+            data.amount = newStock;
+            await productService.update(data.productId, {amount: data.amount});
+
             return newItem;
         }
 
-        const updateItem = await this.updateItem(data.orderId, data)
-        return updateItem;
+        const newItem = await models.OrderProduct.create(data);
+
+        const newStock = productStock - amountToBuy;
+        data.amount = newStock;
+        await productService.update(data.productId, {amount: data.amount});
+
+        return newItem;
     }
 
     async findAllOrders() {
@@ -53,9 +73,9 @@ class OrdersService {
         return order;
     }
 
-    async updateItem(id, changes) {
+    async updateItem(orderId, productId, changes) {
         const [rowsUpdated, [updatedItem]] = await models.OrderProduct.update(changes, {
-            where: { orderId: id },
+            where: { orderId: orderId, productId: productId },
             returning: true,
         });
 

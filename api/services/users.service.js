@@ -23,11 +23,10 @@ class UsersService {
     }
 
     async findOneUser(userId) {
-        console.log('userId-----------', userId)
         const user = await models.User.findByPk(userId, {
             include: ['products', 'order']
         });
-        console.log('user-----------', user)
+
         if (!user) {
             throw boom.notFound('user not found');
         }

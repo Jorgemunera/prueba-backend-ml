@@ -52,7 +52,7 @@ router.get('/:id',
         }
     }
 );
-
+let stock = 0
 router.post('/',
     passport.authenticate('jwt', {session: false}),
     validatorHandler(createProductSchema, 'body'),

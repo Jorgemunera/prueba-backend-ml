@@ -59,7 +59,7 @@ router.post('/add-item',
     async (req, res, next) => {
         try {
             const body = req.body;
-            const newItem = await service.updateOrAddItem(body);
+            const newItem = await service.addItem(body);
             res.status(201).json(newItem);
         } catch (error) {
             next(error);
