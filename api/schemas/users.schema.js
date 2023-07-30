@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
 const id = Joi.number().integer().positive();
+const userId = Joi.number().integer().positive();
 const email = Joi.string().email();
 const password = Joi.string().min(8);
 const role = Joi.array().items(Joi.string().valid('administrador', 'vendedor', 'comprador')).optional();
@@ -17,7 +18,11 @@ const updateUserSchema = Joi.object({
 });
 
 const getUserSchema = Joi.object({
-    id: id.required(),
+    userId: userId.required(),
 });
 
-module.exports = { createUserSchema, updateUserSchema, getUserSchema }
+const deleteUserSchema = Joi.object({
+    userId: userId.required(),
+});
+
+module.exports = { createUserSchema, updateUserSchema, deleteUserSchema }

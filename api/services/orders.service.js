@@ -25,7 +25,7 @@ class OrdersService {
                 orderId: data.orderId,
                 productId: data.productId
             }
-        })
+        });
 
         if(item.length === 0){
             const newItem = await models.OrderProduct.create(data);
@@ -43,8 +43,8 @@ class OrdersService {
         return orders;
     }
 
-    async findOneOrder(id) {
-        const order = await models.Order.findByPk(id, {
+    async findOrderByUser(userId) {
+        const order = await models.Order.findByPk(userId, {
             include: ['user', 'items']
         });
         if (!order) {

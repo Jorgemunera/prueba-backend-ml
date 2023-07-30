@@ -15,7 +15,7 @@ const getAllOrdersSchema = Joi.object({
 });
 
 const getOrderSchema = Joi.object({
-    id: id.required(),
+    userId: userId.required(),
 });
 
 const deleteOrderSchema = Joi.object({

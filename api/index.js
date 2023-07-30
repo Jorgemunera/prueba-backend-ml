@@ -28,9 +28,7 @@ const options = {
 
 app.use(cors(options))
 
-app.get('/api', (req, res) => {
-    res.send('hola mundo')
-})
+require('./utils/auth');
 
 routerApi(app);
 

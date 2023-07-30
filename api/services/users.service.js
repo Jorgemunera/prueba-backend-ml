@@ -22,20 +22,29 @@ class UsersService {
         return rta;
     }
 
-    async findOneUser(id) {
-        const user = await models.User.findByPk(id, {
+    async findOneUser(userId) {
+        console.log('userId-----------', userId)
+        const user = await models.User.findByPk(userId, {
             include: ['products', 'order']
         });
+        console.log('user-----------', user)
         if (!user) {
             throw boom.notFound('user not found');
         }
         return user;
     }
 
-    async delete(id) {
-        const user = await this.findOneUser(id);
+    async findByEmail(email) {
+        const rta = await models.User.findOne({
+            where: { email }
+        });
+        return rta;
+    }
+
+    async delete(userId) {
+        const user = await this.findOneUser(userId);
         await user.destroy();
-        return { id };
+        return { userId };
     }
 }
 
