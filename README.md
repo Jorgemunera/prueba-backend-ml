@@ -158,9 +158,11 @@ Permite obtener el registro de un producto, requiere bearer token, se debe manda
 
 ```http
   GET https://api-ml.fly.dev/api/v1/products/user-id
-
-
+```
 Obtenemos los productos que pertenecen a un usuario (vendedor), requiere de bearer token
+
+
+### Información adicional
 
 ## Authors
 
@@ -177,7 +179,10 @@ El proyecto está conteinerizado, de tal manera que hay varias formas de probarl
 
 2. Tenga en cuenta las variables de ambiente trabajadas y el env.example
 
-3. Puede correr docker-compose up -d
+3. Puede correr 
+```bash
+docker-compose up -d
+```
 
     Esto le va a levantar 3 servicios de docker, uno que corre la base de datos, otro 
     corre un manejador de base de datos como gadmin y la aplicacion o backend
@@ -199,3 +204,8 @@ El proyecto está conteinerizado, de tal manera que hay varias formas de probarl
 5. Pruebe todos los endpoints mencionados anteriormente
 
     
+## 🔗 Links
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://github.com/Jorgemunera)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jorgemunera/)
+[![instagram ](https://img.shields.io/badge/instagram-1DA1F2?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/jorgemunera1/)
+
