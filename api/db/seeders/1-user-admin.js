@@ -6,7 +6,7 @@ module.exports = {
         email: 'admin@mail.com',
         password: 'admin1234',
         role: ['administrador'],
-        createdAt: new Date(),
+        created_at: new Date(),
       }]);
     },
     down: (queryInterface) => {
