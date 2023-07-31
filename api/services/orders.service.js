@@ -86,12 +86,18 @@ class OrdersService {
     }
 
     async findProductsInOrderByUser(userId) {
-        const order = await models.Order.findByPk(userId);
+        const order = await models.Order.findOne({
+            where:{
+                userId: userId
+            }
+        });
+
         if (!order) {
             throw boom.notFound('Order not found');
         }
 
         const orderId = order.id;
+
         const registros = await models.OrderProduct.findAll({
             where:{
                 orderId: orderId
@@ -105,7 +111,7 @@ class OrdersService {
               acc[curr.productId] += curr.amount;
             }
             return acc;
-          }, {});
+        }, {});
 
         let productsInOrder = []
         for(const productId in amountPurchasedByProduct){
@@ -114,6 +120,7 @@ class OrdersService {
                 throw boom.notFound('Product not found');
             }
             const copyProduct = {...product.dataValues}
+
             copyProduct.amount = amountPurchasedByProduct[productId]
             productsInOrder.push(copyProduct)
         }

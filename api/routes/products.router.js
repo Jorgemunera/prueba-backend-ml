@@ -25,12 +25,12 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.get('/user/:userId',
+router.get('/user-id',
     passport.authenticate('jwt', {session: false}),
-    validatorHandler(getProductsByUserSchema, 'params'),
+    // validatorHandler(getProductsByUserSchema, 'params'),
     async (req, res, next) => {
         try {
-            const {userId} = req.params;
+            const userId = req.user.sub;
             const products = await service.findProductsByUserId(userId);
             res.status(200).json(products);
         } catch (error) {
