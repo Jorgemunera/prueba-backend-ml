@@ -24,8 +24,4 @@ services:
         restart: always
         ports:
         - "3000:3000"
-        command:
-        - sh
-        - -c
-        - |
-            npm run dev
+        command: sh -c "npx sequelize-cli db:migrate && node index.js"
