@@ -8,7 +8,11 @@ RUN npm install
 
 COPY . .
 
-ENV DATABASE_URL postgres://admin:admin123@postgres:5432/market_db
+RUN npx sequelize-cli db:migrate
+
+RUN  npx sequelize-cli db:seed:all
+
+# ENV DATABASE_URL=postgres://api_ml:okl0mvTVHu1QcKs@api-db-ml.flycast:5443463/api_ml?sslmode=disable
 
 ENV JWT_SECRET='secret123'
 
