@@ -15,6 +15,12 @@ class UsersService {
         return newUserProduct;
     }
 
+    async findRoleByUser(userId) {
+        const rta = await models.User.findByPk(userId);
+        console.log("role ------------",rta.role)
+        return rta.role;
+    }
+
     async findAllUsers() {
         const rta = await models.User.findAll({
             include: ['products', 'order']

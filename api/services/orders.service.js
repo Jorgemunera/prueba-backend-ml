@@ -73,6 +73,43 @@ class OrdersService {
         return order;
     }
 
+    // pendiente configurar este servicio para poder consultar en la tabla de OrderProduct por el orderId, primero con mi sesion, tengo el userId, con eso debo consultar en Order por mi UserId, el resultado me trae mi orden o carrito, con ese orderId deberia consultar en OrderProduct por mi order Id, de alli debo coger todos los productsId, sumar sus cantidades y renderizar una sola card por producto con la cantidad adecuada
+    async findProductsInOrderByUser(userId) {
+        const order = await models.Order.findByPk(userId);
+        if (!order) {
+            throw boom.notFound('Order not found');
+        }
+
+        const orderId = order.id;
+        const registros = await models.OrderProduct.findAll({
+            where:{
+                orderId: orderId
+            }
+        })
+
+        const amountPurchasedByProduct = registros.reduce((acc, curr) => {
+            if (!acc[curr.productId]) {
+              acc[curr.productId] = curr.amount;
+            } else {
+              acc[curr.productId] += curr.amount;
+            }
+            return acc;
+          }, {});
+
+        let productsInOrder = []
+        for(const productId in amountPurchasedByProduct){
+            const product = await models.Product.findByPk(productId);
+            if (!product) {
+                throw boom.notFound('Product not found');
+            }
+            const copyProduct = {...product.dataValues}
+            copyProduct.amount = amountPurchasedByProduct[productId]
+            productsInOrder.push(copyProduct)
+        }
+
+        return productsInOrder;
+    }
+
     async updateItem(orderId, productId, changes) {
         const [rowsUpdated, [updatedItem]] = await models.OrderProduct.update(changes, {
             where: { orderId: orderId, productId: productId },

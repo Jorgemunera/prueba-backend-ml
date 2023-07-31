@@ -25,4 +25,4 @@ const deleteUserSchema = Joi.object({
     userId: userId.required(),
 });
 
-module.exports = { createUserSchema, updateUserSchema, deleteUserSchema }
+module.exports = { createUserSchema, updateUserSchema, deleteUserSchema, getUserSchema }

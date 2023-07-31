@@ -25,14 +25,27 @@ router.get('/',
     }
 );
 
-router.get('/:id',
+router.get('/get-role-by-user',
     passport.authenticate('jwt', {session: false}),
-    validatorHandler(getUserSchema, 'params'),
     async (req, res, next) => {
         try {
-            const { id } = req.params;
-            const category = await service.findOneUser(id);
-            res.status(200).json(category);
+            const userId = req.user.sub;
+            const user = await service.findRoleByUser(userId);
+            res.status(200).json(user);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+router.get('/:id',
+    passport.authenticate('jwt', {session: false}),
+    // validatorHandler(getUserSchema, 'params'),
+    async (req, res, next) => {
+        try {
+            const {id} = req.params;
+            const user = await service.findOneUser(id);
+            res.status(200).json(user);
         } catch (error) {
             next(error);
         }
@@ -44,8 +57,8 @@ router.post('/',
     async (req, res, next) => {
         try {
             const body = req.body;
-            const newCategory = await service.create(body);
-            res.status(201).json(newCategory);
+            const newUser = await service.create(body);
+            res.status(201).json(newUser);
         } catch (error) {
             next(error);
         }

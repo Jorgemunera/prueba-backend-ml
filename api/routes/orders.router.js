@@ -24,15 +24,14 @@ router.get('/',
     }
 );
 
+// endpoint para obtener los productos comprados por usuario
 router.get('/user',
     passport.authenticate('jwt', {session: false}),
-    validatorHandler(getOrderSchema, 'params'),
     async (req, res, next) => {
         try {
-            console.log('req.user ------------- ',req.user)
-            // const { userId } = req.user;
-            // const order = await service.findOrderByUser(userId);
-            res.status(200).json(order);
+            const userId = req.user.sub;
+            const products = await service.findProductsInOrderByUser(userId);
+            res.status(200).json(products);
         } catch (error) {
             next(error);
         }
