@@ -14,7 +14,7 @@ email: admin@mail.com
 password: admin1234
 
 
-## Documentsssation
+## Documentación
 
 Repositorio [backend](https://github.com/Jorgemunera/prueba-backend-ml), Repositorio [frontend](https://github.com/Jorgemunera/prueba-back-ml-front), Aplicación [backend desplegada](https://api-ml.fly.dev/api/v1), Aplicación de [React desplegada](https://transcendent-sunburst-f959be.netlify.app/) 
 
