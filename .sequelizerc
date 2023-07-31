@@ -2,4 +2,5 @@ module.exports = {
   'config': './api/db/config.js',
   'models-path': './api/db/models/',
   'migrations-path': './api/db/migrations/',
+  'seeders-path': './api/db/seeders/',
 }
