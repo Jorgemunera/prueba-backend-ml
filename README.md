@@ -177,10 +177,7 @@ El proyecto está conteinerizado, de tal manera que hay varias formas de probarl
 
 2. Tenga en cuenta las variables de ambiente trabajadas y el env.example
 
-3. Puede correr 
-```bash
-docker-compose up -d
-```
+3. Puede correr docker-compose up -d
 
     Esto le va a levantar 3 servicios de docker, uno que corre la base de datos, otro 
     corre un manejador de base de datos como gadmin y la aplicacion o backend
