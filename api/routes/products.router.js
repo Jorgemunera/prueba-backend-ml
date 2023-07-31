@@ -52,14 +52,15 @@ router.get('/:id',
         }
     }
 );
-let stock = 0
+
 router.post('/',
     passport.authenticate('jwt', {session: false}),
     validatorHandler(createProductSchema, 'body'),
     async (req, res, next) => {
         try {
+            const userId = req.user.sub;
             const body = req.body;
-            const newProduct = await service.create(body);
+            const newProduct = await service.create({...body, ...{userId:userId}});
             res.status(201).json(newProduct);
         } catch (error) {
             next(error);

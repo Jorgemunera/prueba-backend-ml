@@ -14,28 +14,23 @@ class OrdersService {
     }
 
     async addItem(data, userId) {
-        console.log("userId------------", userId)
-
         const amountToBuy = 1;
         const order = await models.Order.findOne({
             where:{
                 userId: userId
             }
         });
-        console.log("order------------", order)
 
         const consultProduct = await models.Product.findOne({
             where:{
                 id: data.productId
             }
         });
-        console.log("consultProduct------------", consultProduct)
         if(!consultProduct){
             throw boom.notFound('product not found');
         }
 
         const productStock = consultProduct.dataValues.amount;
-        console.log("productStock------------", productStock)
 
         if(amountToBuy > productStock){
             throw boom.badRequest('stock not available');
@@ -43,12 +38,9 @@ class OrdersService {
 
         if(!order){
             const newOrder = await this.create({userId});
-            console.log("newOrder------------", newOrder)
             const obj = {...data, ...{userId: userId, amount: amountToBuy, orderId: newOrder.dataValues.id}}
-            console.log("obj------------", obj)
 
             const newItem = await models.OrderProduct.create(obj);
-            console.log("newItem------------", newItem)
 
             const newStock = productStock - amountToBuy;
             data.amount = newStock;
@@ -59,7 +51,6 @@ class OrdersService {
 
         const obj = {...data, ...{userId: userId, amount: amountToBuy, orderId: order.dataValues.id}}
         const newItem = await models.OrderProduct.create(obj);
-        console.log("newItem2------------", newItem)
 
         const newStock = productStock - amountToBuy;
         data.amount = newStock;
