@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-ENV DB_URI postgres://admin:admin123@postgres:5674/market_db
+ENV DATABASE_URL postgres://admin:admin123@postgres:5432/market_db
 
 ENV JWT_SECRET='secret123'
 
