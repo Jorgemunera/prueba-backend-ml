@@ -2,12 +2,25 @@
 # Prueba Backend MarketPlace - ML
 
 La sigueinte es una API que cubre basicamente el CRUD de 3 entidades relacionales (users, products y orders)
-Se exponen todos los servicios que cubren las necesidades de la prueba y algunos más para permitir el flujo continúo de la app
+Se exponen todos los servicios que cubren las necesidades de la prueba y algunos más para permitir el flujo continúo de la app.
+
+Se manejan migraciones con sequelize, puede ver el proyecto desplegado en los enlaces de la documentación
+
+tenga en cuenta:
+la migración inicial, ejecuta un seed de datos inicial, que no es mas que un usuario administrador
+sus credenciales son:
+
+email: admin@mail.com
+password: admin1234
 
 
 ## Documentsssation
 
-[backend](https://github.com/Jorgemunera/prueba-backend-ml)
+Repositorio [backend](https://github.com/Jorgemunera/prueba-backend-ml), Repositorio [frontend](https://github.com/Jorgemunera/prueba-back-ml-front), Aplicación [backend desplegada](https://api-ml.fly.dev/api/v1), Aplicación de [React desplegada](https://transcendent-sunburst-f959be.netlify.app/) 
+
+
+
+
 
 
 ## API Reference
@@ -155,3 +168,37 @@ Obtenemos los productos que pertenecen a un usuario (vendedor), requiere de bear
 
 Jorge Múnera
 +57 3168234878
+
+## Installation
+
+El proyecto está conteinerizado, de tal manera que hay varias formas de probarlo localmente
+
+1. Descargue el repositorio e instale las dependencias
+
+2. Tenga en cuenta las variables de ambiente trabajadas y el env.example
+
+3. Puede correr 
+```bash
+docker-compose up -d
+```
+
+    Esto le va a levantar 3 servicios de docker, uno que corre la base de datos, otro 
+    corre un manejador de base de datos como gadmin y la aplicacion o backend
+
+    Esto tambien levantará toda la estructura de una base de datos relacional en postgres
+    Tambien, se creará por defecto un user administrador
+
+    **IMPORTANTE**
+
+    las credenciales del user administrador son:
+    email: admin@mail.com
+    password: admin1234
+
+4. Tenga en cuenta que en las variables de entorno y si va hacer pruebas locales, la base
+    de datos conectada es la desplegada en el hosting de fly.io, asi que para sus pruebas
+    locales, lo recomendable es cambiar la url de conexión y en donde pone el host, pondrá
+    el nombre del servicio que corre la base de datos
+    
+5. Pruebe todos los endpoints mencionados anteriormente
+
+    
