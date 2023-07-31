@@ -57,8 +57,9 @@ router.post('/add-item',
     validatorHandler(createOrderProductSchema, 'body'),
     async (req, res, next) => {
         try {
+            const userId = req.user.sub;
             const body = req.body;
-            const newItem = await service.addItem(body);
+            const newItem = await service.addItem(body, userId);
             res.status(201).json(newItem);
         } catch (error) {
             next(error);

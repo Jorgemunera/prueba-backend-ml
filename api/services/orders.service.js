@@ -13,32 +13,42 @@ class OrdersService {
         return newOrder;
     }
 
-    async addItem(data) {
-        const amountToBuy = data.amount;
+    async addItem(data, userId) {
+        console.log("userId------------", userId)
+
+        const amountToBuy = 1;
         const order = await models.Order.findOne({
             where:{
-                userId: data.userId
+                userId: userId
             }
         });
+        console.log("order------------", order)
 
         const consultProduct = await models.Product.findOne({
             where:{
                 id: data.productId
             }
         });
-
+        console.log("consultProduct------------", consultProduct)
         if(!consultProduct){
             throw boom.notFound('product not found');
         }
 
         const productStock = consultProduct.dataValues.amount;
+        console.log("productStock------------", productStock)
+
         if(amountToBuy > productStock){
             throw boom.badRequest('stock not available');
         }
 
         if(!order){
-            const newOrder = await this.create(data);
-            const newItem = await models.OrderProduct.create(data);
+            const newOrder = await this.create({userId});
+            console.log("newOrder------------", newOrder)
+            const obj = {...data, ...{userId: userId, amount: 1, orderId: newOrder.dataValues.id}}
+            console.log("obj------------", obj)
+
+            const newItem = await models.OrderProduct.create(obj);
+            console.log("newItem------------", newItem)
 
             const newStock = productStock - amountToBuy;
             data.amount = newStock;
@@ -47,7 +57,9 @@ class OrdersService {
             return newItem;
         }
 
-        const newItem = await models.OrderProduct.create(data);
+        const obj = {...data, ...{userId: userId, amount: 1, orderId: order.dataValues.id}}
+        const newItem = await models.OrderProduct.create(obj);
+        console.log("newItem2------------", newItem)
 
         const newStock = productStock - amountToBuy;
         data.amount = newStock;
@@ -73,7 +85,6 @@ class OrdersService {
         return order;
     }
 
-    // pendiente configurar este servicio para poder consultar en la tabla de OrderProduct por el orderId, primero con mi sesion, tengo el userId, con eso debo consultar en Order por mi UserId, el resultado me trae mi orden o carrito, con ese orderId deberia consultar en OrderProduct por mi order Id, de alli debo coger todos los productsId, sumar sus cantidades y renderizar una sola card por producto con la cantidad adecuada
     async findProductsInOrderByUser(userId) {
         const order = await models.Order.findByPk(userId);
         if (!order) {
