@@ -44,7 +44,7 @@ class OrdersService {
         if(!order){
             const newOrder = await this.create({userId});
             console.log("newOrder------------", newOrder)
-            const obj = {...data, ...{userId: userId, amount: 1, orderId: newOrder.dataValues.id}}
+            const obj = {...data, ...{userId: userId, amount: amountToBuy, orderId: newOrder.dataValues.id}}
             console.log("obj------------", obj)
 
             const newItem = await models.OrderProduct.create(obj);
@@ -57,7 +57,7 @@ class OrdersService {
             return newItem;
         }
 
-        const obj = {...data, ...{userId: userId, amount: 1, orderId: order.dataValues.id}}
+        const obj = {...data, ...{userId: userId, amount: amountToBuy, orderId: order.dataValues.id}}
         const newItem = await models.OrderProduct.create(obj);
         console.log("newItem2------------", newItem)
 
